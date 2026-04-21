@@ -1,0 +1,28 @@
+name: Build and Push Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Login to Quay
+        run: |
+          docker login quay.io \
+            -u ${{ secrets.QUAY_USER }} \
+            -p ${{ secrets.QUAY_PASSWORD }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t quay.io/phatthananvst01/nodejsimage:v1.0.0 .
+
+      - name: Push Docker image
+        run: |
+          docker push quay.io/phatthananvst01/nodejsimage:v1.0.0
