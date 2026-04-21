@@ -1,0 +1,20 @@
+name: Build and Push Image
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Login to Quay
+      run: |
+        docker login quay.io -u ${{ secrets.QUAY_USER }} -p ${{ secrets.QUAY_PASSWORD }}
+
+    - name: Build & Push
+      run: |
+        docker build -t quay.io/ORG/nodejs-app:v1.0.0 .
+        docker push quay.io/ORG/nodejs-app:v1.0.0
